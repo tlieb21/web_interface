@@ -1,6 +1,7 @@
 # web_interface
 
 Web server to stream video from a ros topic
+
 Working to allow drawing/ markup on the video stream
 
 ## Usage:
@@ -10,6 +11,6 @@ Working to allow drawing/ markup on the video stream
 `gunicorn --threads 5 --workers 1 --bind <your_ip>:8080 app:app`
 * Replace `<your_ip>` by the machine's ip.
 
-## Prerequisite:
+## Prerequisites:
 Flask, Ros, Gunicorn
 
