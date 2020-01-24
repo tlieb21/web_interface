@@ -1,0 +1,134 @@
+<html>
+    <head>
+        <title>Camera Stream</title>
+	<style>
+
+.rotateimg90 {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);	
+}
+
+.rotateimg180 {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);	
+}
+
+.rotateimg270 {
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    transform: rotate(270deg);	
+}
+
+.container {
+    position: relative;
+    text-align: center;
+}
+
+.topleft {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+}
+
+.topright {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+
+#video_canvas {
+    opacity: 0.5;
+}
+
+	</style>
+    </head>
+
+    <body>
+    
+    <div class="container">
+	{% if rotate == 180 %} <!--Default image orientation-->
+            <img id="v180" src="{{ url_for('video_feed') }}" class="rotateimg180" height="100%" width="100%">
+	{% endif %}
+	{% if rotate == 90 %}
+            <img src="{{ url_for('video_feed') }}" class="rotateimg90" height="100%" width="100%">
+	{% endif %}
+	{% if rotate == 270 %}
+            <img src="{{ url_for('video_feed') }}" class="rotateimg270" height="100%" width="100%">
+	{% endif %}
+	{% if rotate == 0 %}
+            <img src="{{ url_for('video_feed') }}" height="100%" width="100%">
+	{% endif %}
+
+	<div class="topleft">
+	    <form action="/rot_left">
+	    	<button type="submit">Rotate stream left</button>
+	    </form>
+	</div>
+	<div class="topright">
+	    <form action="/rot_right">
+	    	<button type="submit">Rotate stream right</button>
+	    </form>
+	</div>
+    </div>
+    
+<!--<canvas id="video_canvas" style="border:2px solid #d3d3d3;"></canvas>
+
+<script>
+    window.onload =  function() {
+	var canvas = document.getElementById("video_canvas");
+	canvas.wdith = canvas scrollWidth;
+	canvas.height =  canvas.scrollHeight;
+	var ctx = canvas.getContext("2d");
+	var img = new Image();
+	//img.src = "{{ url_for('video_feed') }}"
+	img.src = document.getElementById("v180");
+	//ctx.fillstyle = "#FF0000";
+	ctx.drawImage(img, 20, 20, 300, 160);
+    };
+</script>-->
+	<!--<div display="flex">
+	    <div style="float:left">
+	    <form action="/rot_left">
+	    	<button type="submit">Rotate stream left</button>
+	    </form>
+	    </div>-->
+	    <!--<div style="float: center">
+	    	<h1>Welcome to the stream</h1>
+	    </div>-->
+	   <!-- <div style="float: right">
+	    <form action="/rot_right">
+	    	<button type="submit">Rotate stream right</button>
+	    </form>
+	    </div>
+	</div>-->
+	
+	<!--{% if rotate == 180 %} <!--Default-->
+	<!--<div class="img-container">
+            <img src="{{ url_for('video_feed') }}" class="rotateimg180" height="100%" width="100%">
+	</div>
+	{% endif %}
+	{% if rotate == 90 %}
+	<div class="img-container">
+            <img src="{{ url_for('video_feed') }}" class="rotateimg90" height="100%" width="100%">
+	</div>
+	{% endif %}
+	{% if rotate == 270 %}
+	<div class="img-container">
+            <img src="{{ url_for('video_feed') }}" class="rotateimg270" height="100%" width="100%">
+	</div>
+	{% endif %}
+	{% if rotate == 0 %}
+	<div class="img-container">
+            <img src="{{ url_for('video_feed') }}" height="100%" width="100%">
+	</div>
+	{% endif %}-->
+    </body>
+</html>
