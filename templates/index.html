@@ -30,6 +30,8 @@
 .container {
     position: relative;
     text-align: center;
+    height: 100%;
+    width: 100%;
 }
 
 .topleft {
@@ -44,18 +46,14 @@
     right: 8px;
 }
 
-#video_canvas {
-    opacity: 0.5;
-}
-
 	</style>
     </head>
 
-    <body>
+    <!--<body>
     
-    <div class="container">
+    <!--<div class="container">
 	{% if rotate == 180 %} <!--Default image orientation-->
-            <img id="v180" src="{{ url_for('video_feed') }}" class="rotateimg180" height="100%" width="100%">
+            <!--<img id="v180" src="{{ url_for('video_feed') }}" class="rotateimg180" height="100%" width="100%">
 	{% endif %}
 	{% if rotate == 90 %}
             <img src="{{ url_for('video_feed') }}" class="rotateimg90" height="100%" width="100%">
@@ -77,58 +75,102 @@
 	    	<button type="submit">Rotate stream right</button>
 	    </form>
 	</div>
-    </div>
-    
-<!--<canvas id="video_canvas" style="border:2px solid #d3d3d3;"></canvas>
+    </div>-->
 
-<script>
-    window.onload =  function() {
-	var canvas = document.getElementById("video_canvas");
-	canvas.wdith = canvas scrollWidth;
-	canvas.height =  canvas.scrollHeight;
-	var ctx = canvas.getContext("2d");
-	var img = new Image();
-	//img.src = "{{ url_for('video_feed') }}"
-	img.src = document.getElementById("v180");
-	//ctx.fillstyle = "#FF0000";
-	ctx.drawImage(img, 20, 20, 300, 160);
-    };
-</script>-->
-	<!--<div display="flex">
-	    <div style="float:left">
+
+    <body data-rsssl=1>
+    <div id="paint" class="container">
+	{% if rotate == 180 %} <!--Default image orientation-->
+         <img id="v180" src="{{ url_for('video_feed') }}" class="rotateimg180" height="100%" width="100%">
+	{% endif %}
+	{% if rotate == 90 %}
+            <img src="{{ url_for('video_feed') }}" class="rotateimg90" height="100%" width="100%">
+	{% endif %}
+	{% if rotate == 270 %}
+            <img src="{{ url_for('video_feed') }}" class="rotateimg270" height="100%" width="100%">
+	{% endif %}
+	{% if rotate == 0 %}
+            <img src="{{ url_for('video_feed') }}" height="100%" width="100%">
+	{% endif %}
+
+	<div class="topleft">
 	    <form action="/rot_left">
 	    	<button type="submit">Rotate stream left</button>
 	    </form>
-	    </div>-->
-	    <!--<div style="float: center">
-	    	<h1>Welcome to the stream</h1>
-	    </div>-->
-	   <!-- <div style="float: right">
+	</div>
+	<div class="topright">
 	    <form action="/rot_right">
 	    	<button type="submit">Rotate stream right</button>
 	    </form>
-	    </div>
-	</div>-->
+	</div>
+	<canvas id="myCanvas" style="border:2px solid #d3d3d3;"></canvas>
+	<img id="canvasImg"></img>
+    </div>
+
+    <script>
+
+	var canvas = document.getElementById('myCanvas');
+	var ctx = canvas.getContext('2d');
+
+	var video = document.getElementById('v180');
+ 
+	var painting = document.getElementById('paint');
+	var paint_style = getComputedStyle(painting);
+	canvas_w = parseInt(paint_style.getPropertyValue('width'));
+	canvas_h = parseInt(paint_style.getPropertyValue('height'));
+	canvas.width = parseInt(paint_style.getPropertyValue('width'));
+	canvas.height = parseInt(paint_style.getPropertyValue('height'));
+
+	var mouse = {x: 0, y: 0};
+ 
+	canvas.addEventListener('mousemove', function(e) {
+  	    mouse.x = e.pageX - this.offsetLeft;
+	    mouse.y = e.pageY - this.offsetTop;
+
+	    //update_stream(video, ctx, canvas_w, canvas_h);
+	}, false);
+
+	ctx.lineWidth = 3;
+	ctx.lineJoin = 'round';
+	ctx.lineCap = 'round';
+	ctx.strokeStyle = '#00CC99';
+
+	var timer = setInterval(function(){
+	    update_stream(video, ctx, canvas_w, canvas_h);
+	}, 20);
+
+	function update_stream(video, ctx, width, height) {
+	    ctx.drawImage(video, 0, 0, width, height);
+	    //setTimeout(draw, 20, video, ctx, width, height);
+	}
 	
-	<!--{% if rotate == 180 %} <!--Default-->
-	<!--<div class="img-container">
-            <img src="{{ url_for('video_feed') }}" class="rotateimg180" height="100%" width="100%">
-	</div>
-	{% endif %}
-	{% if rotate == 90 %}
-	<div class="img-container">
-            <img src="{{ url_for('video_feed') }}" class="rotateimg90" height="100%" width="100%">
-	</div>
-	{% endif %}
-	{% if rotate == 270 %}
-	<div class="img-container">
-            <img src="{{ url_for('video_feed') }}" class="rotateimg270" height="100%" width="100%">
-	</div>
-	{% endif %}
-	{% if rotate == 0 %}
-	<div class="img-container">
-            <img src="{{ url_for('video_feed') }}" height="100%" width="100%">
-	</div>
-	{% endif %}-->
+	//var timer = setInterval(function(){update_stream(video, ctx, width, height)}, 20);
+ 
+	canvas.addEventListener('mousedown', function(e) {
+    	    clearInterval(timer);
+	    //timer.pause();	    
+
+	    ctx.beginPath();
+    	    ctx.moveTo(mouse.x, mouse.y);
+ 
+    	    canvas.addEventListener('mousemove', onPaint, false);
+	}, false);
+ 
+	canvas.addEventListener('mouseup', function() {
+	    var drawing = canvas.toDataURL();
+	    document.getElementById('canvasImg').src = drawing;
+    	    canvas.removeEventListener('mousemove', onPaint, false);
+	    //timer.resume();
+	    timer = setInterval(function(){
+	        update_stream(video, ctx, canvas_w, canvas_h);
+	    }, 20);
+	}, false);
+ 
+	var onPaint = function() {
+    	    ctx.lineTo(mouse.x, mouse.y);
+    	    ctx.stroke();
+	};
+    </script>
+   
     </body>
 </html>

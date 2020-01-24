@@ -15,7 +15,7 @@ angle = 0
 def on_image(msg):
     global frame
     cv_image = cv2.flip(cv2.flip(bridge.imgmsg_to_cv2(msg, desired_encoding = "passthrough"),0),1)
-    #cv_image = cv2.rotate(bridge.imgmsg_to_cv2(msg, desired_encoding = "passthrough"), cv2.ROTATE_90_CLOCKWISE)
+    #cv_image = cv2.rotate(bridge.imgmsg_to_cv2(msg, desired_encoding = "passthrough"), cv2.ROTATE_180)
     frame = cv2.imencode(".jpg",cv_image)[1].tobytes()
     event.set()
 
