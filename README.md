@@ -1,8 +1,6 @@
 # web_interface
 
-Web server to stream video from a ros topic
-
-Working to allow drawing/ markup on the video stream
+Web server to stream video from a ros topic. Working to allow drawing/ markup on the video stream
 
 ## Usage:
 `roslaunch video_stream_opencv camera.launch video_stream_provider:=<x>`
